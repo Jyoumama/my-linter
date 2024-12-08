@@ -1,0 +1,33 @@
+{
+  "name": "my-linter",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "my-linter": "./src/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fix": "prettier --write . && eslint --fix .",
+    "lint": "prettier --check . && eslint .",
+    "reset-test": "node src/prepareTestFile.js"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "fast-glob": "^3.3.2",
+    "glob": "^11.0.0",
+    "play-sound": "^1.1.6",
+    "winston": "^3.17.0",
+    "yargs": "^17.7.2"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "A simple CLI linter with sound notifications",
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.13.0",
+    "prettier": "^3.4.2"
+  }
+}
