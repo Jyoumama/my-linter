@@ -1,13 +1,13 @@
-# my-linter
-A CLI tool combining Prettier and ESLint 
+# mama-linter CLI
 
-# My-Linter CLI
+A CLI tool combining Prettier and ESLint with sound notifications
 
-My-Linter CLI は、ESLint と Prettier を使用してコードスタイルを統一し、手動修正箇所のリストアップや音声通知機能🎵を備えたツールです。
+mama-Linter CLI は、ESLint と Prettier を使用してコードスタイルを統一し、手動修正箇所のリストアップや音声通知機能🎵を備えたツールです。
 
 ---
 
 ## 特徴
+
 - **自動修正**: ESLint と Prettier によるコードの自動修正。
 - **手動修正箇所の特定**: 修正が必要な箇所をリストアップ。
 - **音声通知**: 修正完了や手動修正が必要な箇所を音声で通知。
@@ -20,8 +20,30 @@ My-Linter CLI は、ESLint と Prettier を使用してコードスタイルを�
 以下のコマンドでインストールします:
 
 ```bash
-npm install -g my-linter
+npm install -g mama-linter
 ```
+
+## 注意: インストールと実行時の名前について
+
+このCLIツールのインストール時にはパッケージ名（mama-linter）を使用します。
+実行時には、CLIコマンド名（my-linter）を使用します。
+
+たとえば：
+
+### インストールコマンド
+
+```bash
+npm install -g mama-linter
+```
+
+### 実行コマンド
+
+```bash
+my-linter --help
+```
+
+このように、**インストール時の名前（mama-linter）と実行時の名前（my-linter)**が異なることに注意してください。
+
 ---
 
 ## 基本的な使い方
@@ -29,22 +51,28 @@ npm install -g my-linter
 ### コマンド一覧
 
 #### 1. デフォルト動作
+
 ```bash
 my-linter
 ```
+
 - 自動修正と手動修正箇所のリストアップを行います。
 - 修正完了後、音声通知が再生されます。
 
 #### 2. 修正のみ
+
 ```bash
 my-linter --fix
 ```
+
 - 自動修正のみを行います。
 
 #### 3. チェックのみ
+
 ```bash
 my-linter --check
 ```
+
 - コードスタイルのチェックのみを行います。
 
 #### 4. 音声通知の無効化
@@ -52,12 +80,15 @@ my-linter --check
 ```bash
 my-linter --noSound
 ```
+
 - 音声通知を無効化します。
 
 #### 5.特定のファイルやディレクトリを指定
+
 ```bash
 my-linter --files "src/**/*.js"
 ```
+
 - 対象ファイルを指定できます。
 
 #### 6.実行モードの指定
@@ -65,24 +96,30 @@ my-linter --files "src/**/*.js"
 ```bash
 my-linter --mode [mode]
 ```
+
 - 実行モードを指定します。
-`default`: 自動修正と手動修正箇所のリストアップを行います。（デフォルト）
-`fix`: 自動修正のみを行います。
-`check`: チェックのみを行い、修正は行いません。
+  `default`: 自動修正と手動修正箇所のリストアップを行います。（デフォルト）
+  `fix`: 自動修正のみを行います。
+  `check`: チェックのみを行い、修正は行いません。
 
 #### 7. 詳細ログ表示
+
 ```bash
 my-linter --verbose
 ```
+
 - 詳細なログを表示します。
 
 #### 8. ヘルプの表示
+
 ```bash
 my-linter --help
 ```
+
 - 使用可能なすべてのオプションとその説明を表示します。
 
 ---
+
 ## デモ: 手動修正と音声通知
 
 My-Linter では、手動修正が必要な箇所をリストアップし、修正が完了すると音声通知を行います。
@@ -92,11 +129,13 @@ My-Linter では、手動修正が必要な箇所をリストアップし、修�
 #### 以下の手順でデモを試してみてください:
 
 #### 1.リセットコマンドの実行
+
 `testFile.js` をリセットするため、以下のコマンドを実行します：
 
 ```bash
 npm run reset-test
 ```
+
 - これにより、`testFile.js` は `var` を含む初期状態に戻ります。
 
 #### 2.My-Linterの実行
@@ -106,13 +145,15 @@ My-Linterを実行して、手動修正箇所をリストアップします。
 ```bash
 my-linter
 ```
+
 出力例:
 
 ```bash
-⚠️ 修正が必要な箇所が残っています: 
+⚠️ 修正が必要な箇所が残っています:
 `src/testFile.js`
 - 2:5 'var' を 'let' または 'const' に置き換えてください (no-var)
 ```
+
 #### 3.手動修正の実行
 
 - エディタで `testFile.js` を開き、`var` を `let` または `const` に置き換えます。
@@ -128,6 +169,7 @@ my-linter
 以下は、My-Linterで使用されるESLintとPrettierの設定ファイルです。
 
 ### `eslint.config.js`
+
 ```js
 import globals from "globals";
 import pluginJs from "@eslint/js";
@@ -165,6 +207,7 @@ export default [
   },
 ];
 ```
+
 ### `prettier.config.js`
 
 ```js
@@ -178,21 +221,27 @@ export default {
   printWidth: 80,
 };
 ```
+
 ---
+
 ## よくある質問（FAQ）
+
 ### Q1. 音声通知を無効化できますか？
+
 A1. はい、`--no-sound` オプションを使用してください。
 
 ### Q2. 特定のファイルだけを修正したい場合は？
+
 A2. `--files` オプションを使用して対象ファイルを指定してください。
 
 ### Q3. 設定ファイルが見つからない場合の動作は？
+
 A3. デフォルト設定が適用されます。ただし、カスタマイズを推奨します。
 
 ---
+
 ### ライセンス
 
 このプロジェクトは MIT ライセンスのもとで提供されています。
-
 
 ---

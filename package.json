@@ -1,5 +1,5 @@
 {
-  "name": "my-linter",
+  "name": "mama-linter",
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",
@@ -20,9 +20,16 @@
     "winston": "^3.17.0",
     "yargs": "^17.7.2"
   },
-  "author": "",
+  "author": "Jyoumama",
   "license": "ISC",
   "description": "A simple CLI linter with sound notifications",
+  "keywords": [
+    "eslint",
+    "prettier",
+    "linter",
+    "code-style",
+    "cli-tool"
+  ],
   "devDependencies": {
     "@eslint/js": "^9.16.0",
     "eslint": "^9.16.0",
