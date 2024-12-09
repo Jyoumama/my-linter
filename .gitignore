@@ -1,2 +1,5 @@
 node_modules/
 application.log
+
+# npm pack で生成される .tgz ファイルを無視
+*.tgz
