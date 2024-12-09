@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import fg from "fast-glob";
 import chalk from "chalk";
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 import { ESLint } from "eslint";
 import * as prettier from "prettier";
 import { playSound } from "./playSound.js";
@@ -12,30 +13,33 @@ import logger from "./logger.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const argv = yargs(process.argv.slice(2))
-  .option("no-sound", {
-    type: "boolean",
-    description: "音声通知を無効化",
-    default: false,
-  })
-  .option("files", {
-    type: "string",
-    description: "対象ファイルやディレクトリを指定",
-    default: "src/**/*.js",
-  })
-  .option("mode", {
-    type: "string",
-    description: "実行モード ('default', 'fix', 'check')",
-    choices: ["default", "fix", "check"],
-    default: "default",
-  })
-  .option("verbose", {
-    type: "boolean",
-    description: "詳細なログを表示",
-    default: false,
+const argv = yargs(hideBin(process.argv))
+  .usage("Usage: $0 [options]")
+  .options({
+    noSound: {
+      type: "boolean",
+      describe: "音声通知を無効化",
+    },
+    files: {
+      type: "string",
+      describe: '対象ファイルやディレクトリを指定\n(デフォルト: "src/**/*.js")',
+      default: "src/**/*.js",
+    },
+    mode: {
+      type: "string",
+      describe:
+        "実行モード ('default', 'fix', 'check')\n(選択可能: \"default\", \"fix\", \"check\")",
+      choices: ["default", "fix", "check"],
+      default: "default",
+    },
+    verbose: {
+      type: "boolean",
+      describe: "詳細なログを表示",
+    },
   })
   .help()
-  .alias("help", "h").argv;
+  .alias("help", "h")
+  .epilogue("詳細については、README.mdを参照してください。").argv;
 
 const soundEnabled = !argv.noSound;
 const targetFiles = argv.files;
