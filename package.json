@@ -2,9 +2,9 @@
   "name": "mama-linter",
   "version": "1.0.4",
   "type": "module",
-  "main": "index.js",
+  "main": "src/index.js",
   "bin": {
-    "my-linter": "./src/index.js"
+    "my-linter": "src/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,6 +12,13 @@
     "lint": "prettier --check . && eslint .",
     "reset-test": "node src/prepareTestFile.js"
   },
+  "files": [
+    "README.md",
+    "src/",
+    "eslint.config.js",
+    "prettier.config.js",
+    "assets/"
+  ],
   "dependencies": {
     "chalk": "^5.3.0",
     "fast-glob": "^3.3.2",
