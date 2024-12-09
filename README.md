@@ -1,8 +1,9 @@
 # my-linter
 A CLI tool combining Prettier and ESLint 
+
 # My-Linter CLI
 
-My-Linter CLI は、ESLint と Prettier を使用してコードスタイルを統一し、手動修正箇所のリストアップや音声通知機能を備えたツールです。
+My-Linter CLI は、ESLint と Prettier を使用してコードスタイルを統一し、手動修正箇所のリストアップや音声通知機能🎵を備えたツールです。
 
 ---
 
@@ -21,7 +22,6 @@ My-Linter CLI は、ESLint と Prettier を使用してコードスタイルを�
 ```bash
 npm install -g my-linter
 ```
-
 ---
 
 ## 基本的な使い方
@@ -29,7 +29,6 @@ npm install -g my-linter
 ### コマンド一覧
 
 #### 1. デフォルト動作
-
 ```bash
 my-linter
 ```
@@ -37,76 +36,150 @@ my-linter
 - 修正完了後、音声通知が再生されます。
 
 #### 2. 修正のみ
-
 ```bash
 my-linter --fix
 ```
 - 自動修正のみを行います。
 
 #### 3. チェックのみ
-
 ```bash
 my-linter --check
 ```
 - コードスタイルのチェックのみを行います。
 
-#### 4. 詳細ログ表示
+#### 4. 音声通知の無効化
 
 ```bash
-my-linter --verbose
-```
-- 詳細なログを表示します。
-
-#### 5. 音声通知の無効化
-
-```bash
-my-linter --no-sound
+my-linter --noSound
 ```
 - 音声通知を無効化します。
 
-#### 6. 特定のファイルやディレクトリを指定
-
+#### 5.特定のファイルやディレクトリを指定
 ```bash
 my-linter --files "src/**/*.js"
 ```
 - 対象ファイルを指定できます。
 
+#### 6.実行モードの指定
+
+```bash
+my-linter --mode [mode]
+```
+- 実行モードを指定します。
+`default`: 自動修正と手動修正箇所のリストアップを行います。（デフォルト）
+`fix`: 自動修正のみを行います。
+`check`: チェックのみを行い、修正は行いません。
+
+#### 7. 詳細ログ表示
+```bash
+my-linter --verbose
+```
+- 詳細なログを表示します。
+
+#### 8. ヘルプの表示
+```bash
+my-linter --help
+```
+- 使用可能なすべてのオプションとその説明を表示します。
+
+---
+## デモ: 手動修正と音声通知
+
+My-Linter では、手動修正が必要な箇所をリストアップし、修正が完了すると音声通知を行います。
+
+### デモ手順
+
+#### 以下の手順でデモを試してみてください:
+
+#### 1.リセットコマンドの実行
+`testFile.js` をリセットするため、以下のコマンドを実行します：
+
+```bash
+npm run reset-test
+```
+- これにより、`testFile.js` は `var` を含む初期状態に戻ります。
+
+#### 2.My-Linterの実行
+
+My-Linterを実行して、手動修正箇所をリストアップします。
+
+```bash
+my-linter
+```
+出力例:
+
+```bash
+⚠️ 修正が必要な箇所が残っています: 
+`src/testFile.js`
+- 2:5 'var' を 'let' または 'const' に置き換えてください (no-var)
+```
+#### 3.手動修正の実行
+
+- エディタで `testFile.js` を開き、`var` を `let` または `const` に置き換えます。
+
+#### 4.修正完了の確認
+
+再度My-Linterを実行すると、「修正完了しました！🎉」という表示と「やったね！」の音声通知が再生されます。
+
 ---
 
 ## 設定ファイルの例
 
-以下は、ESLint と Prettier の設定例です。
+以下は、My-Linterで使用されるESLintとPrettierの設定ファイルです。
 
-### `.eslintrc.js`
+### `eslint.config.js`
+```js
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import eslintConfigPrettier from "eslint-config-prettier";
 
-```javascript
-module.exports = {
-  env: {
-    browser: true,
-    es2021: true,
+export default [
+  {
+    languageOptions: { globals: globals.nodeBuiltin },
   },
-  extends: ["eslint:recommended", "plugin:prettier/recommended"],
-  rules: {
-    "no-unused-vars": "warn",
-    "prefer-const": "error",
+  pluginJs.configs.recommended,
+  eslintConfigPrettier,
+  {
+    rules: {
+      "no-var": ["error"],
+      "prefer-const": ["error"],
+      camelcase: ["warn"],
+      "no-console": ["warn"],
+      "no-unused-vars": ["warn"],
+      semi: ["error", "always"],
+      quotes: "off",
+      indent: "off",
+      "eol-last": ["error", "always"],
+      "no-trailing-spaces": "error",
+      "object-curly-spacing": ["error", "always"],
+      "array-bracket-spacing": ["error", "never"],
+    },
   },
+  {
+    files: ["src/testFile.js", "src/testFileTemplate.js"],
+    rules: {
+      "no-unused-vars": "off",
+      "no-console": "off",
+      "no-undef": "off",
+    },
+  },
+];
+```
+### `prettier.config.js`
+
+```js
+export default {
+  tabWidth: 2,
+  useTabs: false,
+  semi: true,
+  singleQuote: false,
+  trailingComma: "es5",
+  bracketSpacing: true,
+  printWidth: 80,
 };
 ```
-
-### `.prettierrc`
-
-```json
-{
-  "semi": true,
-  "singleQuote": true,
-  "tabWidth": 2
-}
-```
-
 ---
-
 ## よくある質問（FAQ）
-
 ### Q1. 音声通知を無効化できますか？
 A1. はい、`--no-sound` オプションを使用してください。
 
@@ -117,7 +190,9 @@ A2. `--files` オプションを使用して対象ファイルを指定してく
 A3. デフォルト設定が適用されます。ただし、カスタマイズを推奨します。
 
 ---
-
-## ライセンス
+### ライセンス
 
 このプロジェクトは MIT ライセンスのもとで提供されています。
+
+
+---
