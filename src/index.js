@@ -2,7 +2,7 @@
 
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { lintAndFix } from "./lintAndFix.js";
+import { Linter } from "./Linter.js";
 import logger from "./logger.js";
 
 const argv = yargs(hideBin(process.argv))
@@ -35,34 +35,19 @@ const argv = yargs(hideBin(process.argv))
   .help()
   .alias("help", "h").argv;
 
-const soundEnabled = !argv.noSound;
-
 (async () => {
   try {
+    const linter = new Linter(argv);
+
     if (argv.fix) {
       logger.info("🔧 自動修正を実行中...");
-      await lintAndFix({
-        files: argv.files,
-        mode: "fix",
-        verbose: argv.verbose,
-        soundEnabled,
-      });
+      await linter.lintAndFix();
     } else if (argv.check) {
       logger.info("🔍 チェックモードで実行中...");
-      await lintAndFix({
-        files: argv.files,
-        mode: "check",
-        verbose: argv.verbose,
-        soundEnabled,
-      });
+      await linter.lintAndFix();
     } else {
       logger.info("🛠️ デフォルトモードで実行中...");
-      await lintAndFix({
-        files: argv.files,
-        mode: "default",
-        verbose: argv.verbose,
-        soundEnabled,
-      });
+      await linter.lintAndFix();
     }
   } catch (error) {
     logger.error("❌ エラーが発生しました:");

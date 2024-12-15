@@ -31,7 +31,9 @@ class Linter {
 
     if (fileContent !== formatted) {
       await fs.writeFile(file, formatted, "utf8");
-      logger.info(chalk.green(`✅ Prettier による修正が適用されました: ${file}`));
+      logger.info(
+        chalk.green(`✅ Prettier による修正が適用されました: ${file}`)
+      );
       if (this.soundEnabled) {
         playSound(path.resolve(__dirname, "../assets/prettier-fix.mp3"));
       }
@@ -50,7 +52,9 @@ class Linter {
     for (const result of results) {
       if (result.output && fix) {
         await fs.writeFile(result.filePath, result.output, "utf8");
-        logger.info(chalk.green(`✅ ESLint による修正が適用されました: ${file}`));
+        logger.info(
+          chalk.green(`✅ ESLint による修正が適用されました: ${file}`)
+        );
         if (this.soundEnabled) {
           playSound(path.resolve(__dirname, "../assets/eslint-fix.mp3"));
         }
@@ -119,10 +123,7 @@ class Linter {
             logger.info(chalk.blue(`詳細ログ: ${file} を処理中。`));
           }
           prettierChanged = await this.runPrettier(file);
-          const manualFixes = await this.runEslint(
-            file,
-            this.mode === "fix"
-          );
+          const manualFixes = await this.runEslint(file, this.mode === "fix");
           manualFixRequired = manualFixRequired || manualFixes;
         }
       } catch (error) {
@@ -182,4 +183,3 @@ const linter = new Linter(argv);
 linter.lintAndFix();
 
 export { Linter };
-
