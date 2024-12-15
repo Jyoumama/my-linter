@@ -151,7 +151,8 @@ my-linter
 ```bash
 ⚠️ 修正が必要な箇所が残っています:
 `src/testFile.js`
-- 2:5 'var' を 'let' または 'const' に置き換えてください (no-var)
+- 4:1 Unexpected var, use let or const instead. (no-var)
+//'var' を 'let' または 'const' に置き換えてください (no-var)
 ```
 
 #### 3.手動修正の実行
