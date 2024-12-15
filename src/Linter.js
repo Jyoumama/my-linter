@@ -3,8 +3,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fg from "fast-glob";
 import chalk from "chalk";
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
 import { ESLint } from "eslint";
 import * as prettier from "prettier";
 import { playSound } from "./playSound.js";
@@ -14,11 +12,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 class Linter {
-  constructor(argv) {
-    this.soundEnabled = !argv.noSound;
-    this.targetFiles = argv.files;
-    this.mode = argv.mode;
-    this.verbose = argv.verbose;
+  constructor({ soundEnabled, targetFiles, mode, verbose }) {
+    this.soundEnabled = soundEnabled;
+    this.targetFiles = targetFiles;
+    this.mode = mode;
+    this.verbose = verbose;
   }
 
   async runPrettier(file) {
@@ -64,22 +62,7 @@ class Linter {
         hasManualFixes = true;
         logger.info(chalk.yellow(`⚠️ 修正が必要な箇所が残っています: ${file}`));
         result.messages.forEach((message) => {
-          let specificMessage = "";
-
-          switch (message.ruleId) {
-            case "no-undef":
-              specificMessage = "未定義の変数を確認してください";
-              break;
-            case "no-unused-vars":
-              specificMessage = "未使用の変数を削除してください";
-              break;
-            case "no-console":
-              specificMessage = "console.log を削除または置き換えてください";
-              break;
-            default:
-              specificMessage = message.message;
-          }
-
+          const specificMessage = message.message;
           logger.info(
             chalk.yellow(
               `- ${message.line}:${message.column} ${specificMessage} (${message.ruleId})`
@@ -150,36 +133,5 @@ class Linter {
     }
   }
 }
-
-const argv = yargs(hideBin(process.argv))
-  .usage("Usage: $0 [options]")
-  .options({
-    noSound: {
-      type: "boolean",
-      describe: "音声通知を無効化",
-    },
-    files: {
-      type: "string",
-      describe: '対象ファイルやディレクトリを指定\n(デフォルト: "src/**/*.js")',
-      default: "src/**/*.js",
-    },
-    mode: {
-      type: "string",
-      describe:
-        "実行モード ('default', 'fix', 'check')\n(選択可能: \"default\", \"fix\", \"check\")",
-      choices: ["default", "fix", "check"],
-      default: "default",
-    },
-    verbose: {
-      type: "boolean",
-      describe: "詳細なログを表示",
-    },
-  })
-  .help()
-  .alias("help", "h")
-  .epilogue("詳細については、README.mdを参照してください。").argv;
-
-const linter = new Linter(argv);
-linter.lintAndFix();
 
 export { Linter };
