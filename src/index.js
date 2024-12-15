@@ -37,18 +37,13 @@ const argv = yargs(hideBin(process.argv))
 
 (async () => {
   try {
-    const linter = new Linter(argv);
-
-    if (argv.fix) {
-      logger.info("🔧 自動修正を実行中...");
-      await linter.lintAndFix();
-    } else if (argv.check) {
-      logger.info("🔍 チェックモードで実行中...");
-      await linter.lintAndFix();
-    } else {
-      logger.info("🛠️ デフォルトモードで実行中...");
-      await linter.lintAndFix();
-    }
+    const linter = new Linter({
+      soundEnabled: !argv.noSound,
+      targetFiles: argv.files,
+      mode: argv.fix ? "fix" : argv.check ? "check" : "default",
+      verbose: argv.verbose,
+    });
+    await linter.lintAndFix();
   } catch (error) {
     logger.error("❌ エラーが発生しました:");
     logger.error(error.message);
