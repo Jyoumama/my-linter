@@ -25,7 +25,10 @@
     "glob": "^11.0.0",
     "play-sound": "^1.1.6",
     "winston": "^3.17.0",
-    "yargs": "^17.7.2"
+    "yargs": "^17.7.2",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.4.2"
   },
   "author": "Jyoumama",
   "license": "ISC",
@@ -39,9 +42,6 @@
   ],
   "devDependencies": {
     "@eslint/js": "^9.16.0",
-    "eslint": "^9.16.0",
-    "eslint-config-prettier": "^9.1.0",
-    "globals": "^15.13.0",
-    "prettier": "^3.4.2"
+    "globals": "^15.13.0"
   }
 }
