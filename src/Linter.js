@@ -80,7 +80,9 @@ class Linter {
   }
 
   async lintAndFix() {
-    const files = await fg([this.targetFiles], { absolute: true });
+    const files = await fg([path.resolve(process.cwd(), this.targetFiles)], {
+      absolute: true,
+    });
     if (!files.length) {
       logger.error(
         chalk.red(`❌ ファイルが見つかりません: ${this.targetFiles}`)
@@ -99,22 +101,12 @@ class Linter {
       try {
         if (this.mode === "check") {
           logger.info(chalk.blue(`🔍 チェック中: ${file}`));
-          if (this.verbose) {
-            logger.info(chalk.blue(`詳細ログ: ${file} をチェックしています。`));
-          }
           const manualFixes = await this.runEslint(file, false);
           manualFixRequired = manualFixRequired || manualFixes;
         } else {
           logger.info(
-            chalk.blue(
-              this.mode === "fix"
-                ? `🔧 修正中: ${file}`
-                : `🛠️ 修正および手動修正箇所をリストアップ中: ${file}`
-            )
+            chalk.blue(`🛠️ 修正および手動修正箇所をリストアップ中: ${file}`)
           );
-          if (this.verbose) {
-            logger.info(chalk.blue(`詳細ログ: ${file} を処理中。`));
-          }
           prettierChanged = await this.runPrettier(file);
           const manualFixes = await this.runEslint(file, this.mode === "fix");
 

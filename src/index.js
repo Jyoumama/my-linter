@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
+import fs from "fs";
+import path from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import fg from "fast-glob";
 import { Linter } from "./Linter.js";
 import logger from "./logger.js";
 import prepareTestFile from "./prepareTestFile.js";
@@ -28,9 +31,6 @@ yargs(hideBin(process.argv))
     async (argv) => {
       logger.info("🛠️ reset-test コマンドが呼び出されました！");
       try {
-        if (argv.verbose) {
-          logger.info("リセット処理を詳細モードで実行します...");
-        }
         const fileToReset = argv.file;
         logger.info(`リセットするファイル: ${fileToReset}`);
         await prepareTestFile(fileToReset);
@@ -64,7 +64,7 @@ yargs(hideBin(process.argv))
         .option("files", {
           type: "string",
           description: "対象のファイルやディレクトリを指定します",
-          default: "src/**/*.js",
+          default: "src/**/*.js", // デフォルト値
         })
         .option("verbose", {
           alias: "v",
@@ -76,6 +76,23 @@ yargs(hideBin(process.argv))
     async (argv) => {
       try {
         const filesPattern = argv.files || "src/**/*.js";
+        if (filesPattern === "src/**/*.js") {
+          const resolvedPath = path.resolve(process.cwd(), "src");
+          if (!fs.existsSync(resolvedPath)) {
+            logger.warn("⚠️'src/' ディレクトリが見つかりません。");
+            logger.info("🛠️ 自動的に初期化を行います...");
+            await prepareTestFile("src/testFile.js");
+            logger.info("✅ `src` ディレクトリが初期化されました。");
+          }
+        }
+
+        const matchedFiles = await fg(filesPattern);
+        if (!matchedFiles.length) {
+          logger.warn(
+            `⚠️ ファイルが見つかりません: ${filesPattern}。--files オプションで対象を指定してください。`
+          );
+          process.exit(1);
+        }
         logger.info(`🔍 ファイルパターン: ${filesPattern}`);
         const linter = new Linter({
           soundEnabled: argv["no-sound"] ? false : true,
