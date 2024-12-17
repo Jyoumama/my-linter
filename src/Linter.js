@@ -81,7 +81,16 @@ class Linter {
 
   async lintAndFix() {
     const files = await fg([this.targetFiles], { absolute: true });
+    if (!files.length) {
+      logger.error(
+        chalk.red(`❌ ファイルが見つかりません: ${this.targetFiles}`)
+      );
+      throw new Error(
+        "指定されたパターンに一致するファイルが見つかりませんでした。"
+      );
+    }
     let manualFixRequired = false;
+    let soundPlayed = false;
 
     for (const file of files) {
       const originalContent = await fs.readFile(file, "utf8");
@@ -93,7 +102,8 @@ class Linter {
           if (this.verbose) {
             logger.info(chalk.blue(`詳細ログ: ${file} をチェックしています。`));
           }
-          await this.runEslint(file, false);
+          const manualFixes = await this.runEslint(file, false);
+          manualFixRequired = manualFixRequired || manualFixes;
         } else {
           logger.info(
             chalk.blue(
@@ -107,6 +117,13 @@ class Linter {
           }
           prettierChanged = await this.runPrettier(file);
           const manualFixes = await this.runEslint(file, this.mode === "fix");
+
+          if ((prettierChanged || manualFixes) && !soundPlayed) {
+            if (this.soundEnabled) {
+              playSound(path.resolve(__dirname, "../assets/attention.mp3"));
+              soundPlayed = true;
+            }
+          }
           manualFixRequired = manualFixRequired || manualFixes;
         }
       } catch (error) {

@@ -6,9 +6,12 @@ import logger from "./logger.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// プロジェクトのルートディレクトリを基準にファイルを作成する
+const projectRoot = path.resolve(__dirname, ".."); // srcディレクトリの一つ上がルート
+
+// 初期状態のテストファイルの内容
 const testFileContent = `
 // ESLint と Prettier の自動修正と手動修正をデモするためのファイル
-
 
 // var は非推奨
 var noUsedVar = 'Hello'; // ダブルクォートではなくシングルクォート（Prettier の修正対象）
@@ -18,28 +21,24 @@ function unusedFunction() {
   const unusedVariable = "This is unused"; // 未使用の変数（ESLint の警告対象）
 }
 
-// 警告対象のコード
-logger.info(noUsedVar); // logger.info の利用が警告される可能性あり（ルール次第）
-
 // 再代入（prefer-const ルールで警告）
-noUsedVar = 'Updated value'; // ダブルクォートではなくシングルクォート（Prettier の修正対象）
+noUsedVar = 'Updated value';
 `;
 
-const filesToReset = [
-  {
-    filePath: path.join(__dirname, "testFile.js"),
-    content: testFileContent,
-  },
-];
-
-(async () => {
+export default async function prepareTestFile(fileToReset) {
   try {
-    for (const file of filesToReset) {
-      await fs.writeFile(file.filePath, file.content, "utf8");
-      logger.info(`Reset file: ${file.filePath}`);
-    }
-    logger.info("Test file has been reset.");
+    // デフォルトのリセットファイルは src/testFile.js
+    const filePath = fileToReset
+      ? path.isAbsolute(fileToReset)
+        ? fileToReset
+        : path.resolve(process.cwd(), fileToReset)
+      : path.join(projectRoot, "src/testFile.js");
+
+    logger.info(`🛠️ リセットするファイルパス: ${filePath}`); // 追加
+    await fs.writeFile(filePath, testFileContent, "utf8");
+    logger.info(`✅ ファイルがリセットされました: ${filePath}`);
   } catch (error) {
-    logger.error("Error resetting test files:", error);
+    logger.error("❌ テストファイルのリセット中にエラーが発生しました:");
+    logger.error(error.message);
   }
-})();
+}
