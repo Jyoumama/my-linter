@@ -26,12 +26,12 @@ yargs(hideBin(process.argv))
         });
     },
     async (argv) => {
-      logger.info("🛠️ reset-test コマンドが呼び出されました！"); // デバッグログ追加
+      logger.info("🛠️ reset-test コマンドが呼び出されました！");
       try {
         if (argv.verbose) {
           logger.info("リセット処理を詳細モードで実行します...");
         }
-        const fileToReset = argv.file; // ユーザーが指定したファイル
+        const fileToReset = argv.file;
         logger.info(`リセットするファイル: ${fileToReset}`);
         await prepareTestFile(fileToReset);
         logger.info("✅ テストファイルがリセットされました。");
@@ -76,7 +76,7 @@ yargs(hideBin(process.argv))
     async (argv) => {
       try {
         const filesPattern = argv.files || "src/**/*.js";
-        logger.info(`🔍 ファイルパターン: ${filesPattern}`); // デバッグログ追加
+        logger.info(`🔍 ファイルパターン: ${filesPattern}`);
         const linter = new Linter({
           soundEnabled: argv["no-sound"] ? false : true,
           targetFiles: filesPattern,
