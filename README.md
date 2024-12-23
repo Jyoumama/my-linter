@@ -120,17 +120,40 @@ my-linter --help
 
 ---
 
-## デモ: 手動修正と音声通知
+## デモの詳細: 手動修正と音声通知
 
-My-Linter では、手動修正が必要な箇所をリストアップし、修正が完了すると音声通知を行います。
+mama-linterの操作を体験するためのデモリポジトリを利用できます。以下の手順で実施してみてください☺️
 
-### デモ手順
+### 1.デモリポジトリの準備
 
-#### 以下の手順でデモを試してみてください
+   1.リポジトリをクローン
+
+   ```bash
+   git clone https://github.com/Jyoumama/mama-linter-demo.git
+   cd mama-linter-demo
+   ```
+
+   2.mama-linter をグローバルにインストールします。
+
+   ```bash
+   npm install -g mama-linter
+   ```
+
+   3.依存関係のインストール（必要な場合）プロジェクト内の依存関係をインストールする場合は、以下を実行します。
+
+   ```bash
+   npm install
+   ```
+
+   これで、デモの準備が整いました！
+
+### 2.デモ手順
+
+以下の手順で`mama-linter`の動作を体験してください。
 
 #### 1.テストファイルのリセット
 
-リセットコマンドで`testFile.js` を初期状態（手動修正できる状態）に戻します：
+リセットコマンドで`testFile.js` を初期状態（手動修正できる状態）に戻します。
 
 ```bash
 my-linter reset-test
@@ -178,6 +201,12 @@ my-linter
 
 - エディタで `testFile.js` を開き、`var` を `let` または `const` に置き換えます。
 
+修正例：
+
+```js
+let noUsedVar = "Hello";// 修正後: no-var ルールに準拠
+```
+
 #### 4.修正完了の確認
 
 再度My-Linterを実行して、修正が正しく反映されたか確認します。
@@ -195,13 +224,36 @@ my-linter
 さらに、修正が完了したことを知らせる音声通知が再生されます。
 **「やったね！」**という達成感を味わいましょう！🎵
 
-### ユーザーカスタマイズの方法
+#### 捕足：他のファイルで試す場合
 
-リセット コマンドはデフォルトで `src/testFile.js` を対象にしていますが、`--file` オプションで別のファイルを指定することも可能です。
+`reset-test` コマンドはデフォルトで `src/testFile.js` を対象にしていますが、`--file` オプションで別のファイルを指定することも可能です。
 
 ```bash
 my-linter reset-test --file=path/to/your/file.js
 ```
+
+---
+
+### デモを試す流れの概要
+
+1.リポジトリをクローン:
+
+  ```bash
+  git clone https://github.com/Jyoumama/mama-linter-demo.git`
+  ```
+
+2.必要なツールのインストール:
+
+  ```bash
+  npm install -g mama-linter
+  ```
+
+3.テストファイルのリセットと実行:
+
+  ```bash
+  my-linter reset-test 
+  my-linter
+  ```
 
 ---
 
